@@ -1,0 +1,21 @@
+apply plugin: 'kotlin-android'
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdk 32
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
+}
+
+dependencies {
+    implementation project(":domain")
+
+    // Retrofit & GSON
+    api "com.squareup.retrofit2:retrofit:2.9.0"
+    api "com.squareup.retrofit2:converter-gson:2.9.0"
+
+}
