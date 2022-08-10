@@ -2,6 +2,9 @@ package com.gooner.befootball.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+// Colors for both Light&Dark Theme
+val LiveMatchesLeagueColor = Color(0xFF262626)
+
 // Colors LightTheme
 val ColorPrimaryLight = Color(0xFFFFFFFF)
 val ColorVariantLight = Color(0xFFEAEAEA)
@@ -10,6 +13,7 @@ val NavigationBarColorSplashScreenLight = Color(0xFFFFFFFF)
 val NavigationBarColorLight = Color(0xFFEAEAEA)
 val LogoColorLight = Color(0xFF000000)
 val BackgroundColorLight = Color(0xFFFFFFFF)
+
 
 // Colors DarkTheme
 val ColorPrimaryDark = Color(0xFF373738)
