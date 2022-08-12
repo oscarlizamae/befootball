@@ -192,7 +192,7 @@ fun LiveMatches(
             )
             Text(
                 modifier = Modifier.padding(end = 16.dp),
-                text = stringResource(id = R.string.live_matches),
+                text = stringResource(id = R.string.all_matches),
                 style = typography.body2,
                 color = MaterialTheme.colors.onPrimary
             )
@@ -284,7 +284,9 @@ fun GameStatus(
                 .padding(top = 2.dp)
                 .size(8.dp, 8.dp)
                 .clip(CircleShape)
-                .background(IndicatorCircleGreen)
+                .background(
+                    if (short == "HT") IndicatorCircleYellow else IndicatorCircleGreen
+                )
         )
     }
 }
