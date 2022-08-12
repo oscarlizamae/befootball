@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -30,7 +31,9 @@ import coil.request.ImageRequest
 import com.gooner.befootball.R
 import com.gooner.befootball.ui.theme.*
 import com.gooner.befootball.util.BarsColors
-import com.gooner.domain.model.League
+import com.gooner.befootball.util.CircleShimmer
+import com.gooner.domain.model.*
+import com.gooner.domain.usecases.GetLiveMatches
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -39,9 +42,10 @@ fun HomeScreen() {
     val context = LocalContext.current
     val homeScreenViewModel = getViewModel<HomeScreenViewModel>()
     val leagues by remember { homeScreenViewModel.leagues }
+    val liveMatches by remember { homeScreenViewModel.liveMatches }
 
     LaunchedEffect(key1 = true) {
-        homeScreenViewModel.fetchCurrentLeagues()
+        homeScreenViewModel.fetchLivesMatches()
     }
 
     BarsColors(
@@ -56,7 +60,7 @@ fun HomeScreen() {
     ) {
         AppLogoContainer()
         LiveMatchesLeagues(leagues = leagues)
-        LiveMatches()
+        LiveMatches(liveMatches = liveMatches)
     }
 
 }
@@ -120,18 +124,23 @@ fun LiveMatchesLeaguesContent(
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState())
     ) {
-        /* for (i in 1..5) {
-            LeagueIcon(
-                leagueName = leagues[i].name,
-                logoUrl = leagues[i].logoUrl
-            )
-        } */
-        leagues.forEachIndexed { index, league ->
-            if (index < 10) {
-                LeagueIcon(
-                    leagueName = league.name,
-                    logoUrl = league.logoUrl
-                )
+        if (leagues.isEmpty()) {
+            for (i in 1..5) {
+                Box(
+                    modifier = Modifier
+                        .padding(top = 8.dp, start = 12.dp, bottom = 24.dp, end = 4.dp)
+                ) {
+                    CircleShimmer(size = 80.dp)
+                }
+            }
+        } else {
+            leagues.forEachIndexed { index, league ->
+                if (index < 10) {
+                    LeagueIcon(
+                        leagueName = league.name,
+                        logoUrl = league.logoUrl ?: "https://images.matematego.com/assets/noimage-cf86abd9b579765c1131ec86cb1e70052199ddadfecf252e5cb98e50535d11f3.png"
+                    )
+                }
             }
         }
     }
@@ -156,14 +165,16 @@ fun LeagueIcon(
                 .clip(CircleShape)
                 .size(80.dp)
                 .clickable { }
-                .background(Color.White),
-            contentScale = ContentScale.Crop,
+                .background(Color.Transparent),
+            contentScale = ContentScale.Fit,
         )
     }
 }
 
 @Composable
-fun LiveMatches() {
+fun LiveMatches(
+    liveMatches: List<Fixture>
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -186,12 +197,16 @@ fun LiveMatches() {
                 color = MaterialTheme.colors.onPrimary
             )
         }
-        LiveMatchesContainer(color = LiveMatchCardColor)
+        LiveMatchesContainer(
+            liveMatches = liveMatches,
+            color = LiveMatchCardColor
+        )
     }
 }
 
 @Composable
 fun LiveMatchesContainer(
+    liveMatches: List<Fixture>,
     color: Color
 ) {
     Row(
@@ -199,14 +214,23 @@ fun LiveMatchesContainer(
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState())
     ) {
-        for (i in 1..5) {
+        /* for (i in 1..5) {
             LiveMatchCard(color = color)
+        } */
+        liveMatches.forEachIndexed { index, fixture ->
+            if (index < 10) {
+                LiveMatchCard(
+                    fixture = fixture,
+                    color = color
+                )
+            }
         }
     }
 }
 
 @Composable
 fun LiveMatchCard(
+    fixture: Fixture,
     color: Color
 ) {
     Row(
@@ -217,17 +241,20 @@ fun LiveMatchCard(
                 .padding(end = 16.dp, top = 8.dp)
                 .fillMaxWidth()
                 .clickable { }
-                .widthIn(0.dp, 125.dp),
+                .widthIn(0.dp, 150.dp),
             shape = RoundedCornerShape(8.dp),
             backgroundColor = color
         ) {
-            GameInfo()
+            GameInfo(fixture = fixture)
         }
     }
 }
 
 @Composable
-fun GameStatus() {
+fun GameStatus(
+    elapsed: Int,
+    short: String
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -246,7 +273,7 @@ fun GameStatus() {
                     bottom = 2.dp,
                     end = 16.dp
                 ),
-                text = "Live",
+                text = if (short != "HT") "$elapsed\'" else { short },
                 style = typography.body2,
                 fontWeight = FontWeight.Bold,
                 color = LiveMatchCardColor
@@ -263,48 +290,57 @@ fun GameStatus() {
 }
 
 @Composable
-fun GameInfo() {
+fun GameInfo(
+    fixture: Fixture
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 16.dp, bottom = 12.dp, start = 8.dp, end = 8.dp)
     ) {
-        GameStatus()
-        Teams()
-        MatchScore()
+        GameStatus(elapsed = fixture.status.elapsed, short = fixture.status.short)
+        Teams(teams = fixture.teams)
+        MatchScore(teams = fixture.teams, goals = fixture.goals)
     }
 }
 
 @Composable
-fun Teams() {
+fun Teams(
+    teams: FixtureTeams
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 8.dp, end = 8.dp, top = 8.dp),
+            .padding(start = 18.dp, end = 18.dp, top = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Image(
-            modifier = Modifier.size(36.dp),
-            painter = painterResource(id = R.drawable.real_madrid),
-            contentDescription = null
+        AsyncImage(model = ImageRequest.Builder(LocalContext.current)
+            .data(teams.home.logoUrl)
+            .build(),
+            contentDescription = teams.home.name,
+            modifier = Modifier.size(36.dp)
         )
-        Image(
-            modifier = Modifier.size(36.dp),
-            painter = painterResource(id = R.drawable.arsenal),
-            contentDescription = null
+        AsyncImage(model = ImageRequest.Builder(LocalContext.current)
+            .data(teams.away.logoUrl)
+            .build(),
+            contentDescription = teams.away.name,
+            modifier = Modifier.size(36.dp)
         )
     }
 }
 
 @Composable
-fun MatchScore() {
+fun MatchScore(
+    teams: FixtureTeams,
+    goals: Goals
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 16.dp, bottom = 10.dp, start = 8.dp, end = 8.dp)
     ) {
-        TeamScore(teamName = "Real Madrid", score = "1")
-        TeamScore(teamName = "Arsenal", score = "1")
+        TeamScore(teamName = teams.home.name, score = goals.home.toString())
+        TeamScore(teamName = teams.away.name, score = goals.away.toString())
     }
 }
 
@@ -323,13 +359,21 @@ fun TeamScore(
             text = teamName,
             style = typography.body2,
             color = Color.White,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .weight(8f)
+                .fillMaxWidth(),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
         Text(
             text = score,
             style = typography.body2,
             color = Color.White,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 4.dp)
         )
     }
 }
