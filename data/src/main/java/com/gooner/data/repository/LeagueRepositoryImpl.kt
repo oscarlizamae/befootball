@@ -5,8 +5,8 @@ import com.gooner.data.remote.mapper.LeagueDtoMapper
 import com.gooner.domain.model.League
 import com.gooner.domain.repository.LeagueRepository
 import com.gooner.domain.util.ResponseResult
-import java.lang.Exception
 import java.util.*
+import kotlin.Exception
 
 class LeagueRepositoryImpl(
     private val beFootballApi: BeFootballApi,
