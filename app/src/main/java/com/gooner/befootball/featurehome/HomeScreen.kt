@@ -9,6 +9,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,14 +25,24 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.gooner.befootball.R
 import com.gooner.befootball.ui.theme.*
 import com.gooner.befootball.util.BarsColors
+import com.gooner.domain.model.League
+import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun HomeScreen() {
 
     val context = LocalContext.current
+    val homeScreenViewModel = getViewModel<HomeScreenViewModel>()
+    val leagues by remember { homeScreenViewModel.leagues }
+
+    LaunchedEffect(key1 = true) {
+        homeScreenViewModel.fetchCurrentLeagues()
+    }
 
     BarsColors(
         statusBarColor = if (isSystemInDarkTheme()) BackgroundColorDark else StatusBarColorLight,
@@ -42,7 +55,7 @@ fun HomeScreen() {
             .background(MaterialTheme.colors.background),
     ) {
         AppLogoContainer()
-        LiveMatchesLeagues()
+        LiveMatchesLeagues(leagues = leagues)
         LiveMatches()
     }
 
@@ -69,7 +82,9 @@ fun AppLogoContainer() {
 }
 
 @Composable
-fun LiveMatchesLeagues() {
+fun LiveMatchesLeagues(
+    leagues: List<League>
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -92,36 +107,56 @@ fun LiveMatchesLeagues() {
             color = Color.White,
             style = typography.h6
         )
-        LiveMatchesLeaguesContent()
+        LiveMatchesLeaguesContent(leagues = leagues)
     }
 }
 
 @Composable
-fun LiveMatchesLeaguesContent() {
+fun LiveMatchesLeaguesContent(
+    leagues: List<League>
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState())
     ) {
-        for (i in 1..5) {
-            LeagueIcon()
+        /* for (i in 1..5) {
+            LeagueIcon(
+                leagueName = leagues[i].name,
+                logoUrl = leagues[i].logoUrl
+            )
+        } */
+        leagues.forEachIndexed { index, league ->
+            if (index < 10) {
+                LeagueIcon(
+                    leagueName = league.name,
+                    logoUrl = league.logoUrl
+                )
+            }
         }
     }
 }
 
 @Composable
-fun LeagueIcon() {
+fun LeagueIcon(
+    leagueName: String,
+    logoUrl: String
+) {
     Box(
         modifier = Modifier
-            .padding(top = 8.dp, start = 16.dp, bottom = 24.dp)
+            .padding(top = 8.dp, start = 12.dp, bottom = 24.dp, end = 4.dp)
     ) {
-        Image(
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(logoUrl)
+                .build(),
+            contentDescription = leagueName,
+            placeholder = painterResource(id = R.drawable.ic_uefa_europa_league),
             modifier = Modifier
                 .clip(CircleShape)
                 .size(80.dp)
-                .clickable { },
-            painter = painterResource(id = R.drawable.ic_uefa_europa_league),
-            contentDescription = stringResource(id = R.string.app_name),
+                .clickable { }
+                .background(Color.White),
             contentScale = ContentScale.Crop,
         )
     }
@@ -279,7 +314,8 @@ fun TeamScore(
     score: String
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .padding(bottom = 6.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
