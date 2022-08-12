@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.Color
 val LiveMatchesLeagueColor = Color(0xFF262626)
 val LiveMatchCardColor = Color(0xFF2648D1)
 val IndicatorCircleGreen = Color(0xFF33FF00)
+val IndicatorCircleYellow = Color(0xFFFBC02D)
 
 // Colors LightTheme
 val ColorPrimaryLight = Color(0xFFFFFFFF)
