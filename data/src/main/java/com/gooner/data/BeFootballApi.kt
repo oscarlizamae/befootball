@@ -8,14 +8,14 @@ import retrofit2.http.Query
 interface BeFootballApi {
 
     companion object {
-        const val API_KEY = "A7d1mbjCXrmshPOb29OVdhU2gFFip1RpmMwjsnqt98Fp6mwDrW"
-        const val API_HOST = "api-football-v1.p.rapidapi.com"
+        const val API_KEY = BuildConfig.API_FOOTBALL_KEY
+        const val API_HOST = BuildConfig.API_FOOTBALL_HOST
     }
 
     @GET("leagues")
     @Headers(
-        "X-RapidAPI-Key: A7d1mbjCXrmshPOb29OVdhU2gFFip1RpmMwjsnqt98Fp6mwDrW",
-        "X-RapidAPI-Host: api-football-v1.p.rapidapi.com"
+        "X-RapidAPI-Key: $API_KEY",
+        "X-RapidAPI-Host: $API_HOST"
     )
     suspend fun getCurrentLeagues(
         @Query("current") current: Boolean = true,
