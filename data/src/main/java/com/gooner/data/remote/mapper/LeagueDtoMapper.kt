@@ -19,8 +19,8 @@ class LeagueDtoMapper : EntityMapper<LeagueInfo, League> {
             league = LeagueDto(
                 id = model.id,
                 name = model.name,
-                type = model.type,
-                logoUrl = model.logoUrl
+                type = model.type ?: "",
+                logoUrl = model.logoUrl ?: ""
             )
         )
 
