@@ -46,6 +46,7 @@ fun HomeScreen() {
 
     LaunchedEffect(key1 = true) {
         homeScreenViewModel.fetchLivesMatches()
+        //homeScreenViewModel.fetchCurrentLeagues()
     }
 
     BarsColors(
@@ -154,6 +155,8 @@ fun LeagueIcon(
     Box(
         modifier = Modifier
             .padding(top = 8.dp, start = 12.dp, bottom = 24.dp, end = 4.dp)
+            .clip(CircleShape)
+            .background(Color(0xFFcfd8dc))
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -162,11 +165,11 @@ fun LeagueIcon(
             contentDescription = leagueName,
             placeholder = painterResource(id = R.drawable.ic_uefa_europa_league),
             modifier = Modifier
-                .clip(CircleShape)
-                .size(80.dp)
+                .padding(8.dp)
+                .size(72.dp)
                 .clickable { }
                 .background(Color.Transparent),
-            contentScale = ContentScale.Fit,
+            contentScale = ContentScale.Inside,
         )
     }
 }
@@ -241,7 +244,7 @@ fun LiveMatchCard(
                 .padding(end = 16.dp, top = 8.dp)
                 .fillMaxWidth()
                 .clickable { }
-                .widthIn(0.dp, 150.dp),
+                .widthIn(0.dp, 130.dp),
             shape = RoundedCornerShape(8.dp),
             backgroundColor = color
         ) {
@@ -313,7 +316,7 @@ fun Teams(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 18.dp, end = 18.dp, top = 8.dp),
+            .padding(start = 12.dp, end = 12.dp, top = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         AsyncImage(model = ImageRequest.Builder(LocalContext.current)
