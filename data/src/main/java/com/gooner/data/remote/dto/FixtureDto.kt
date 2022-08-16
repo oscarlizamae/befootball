@@ -8,7 +8,7 @@ data class FixtureResponse(
 
 data class FixtureResponseInfo(
     val fixture: FixtureDto,
-    val league: League,
+    val league: LeagueDto,
     val teams: FixtureTeams,
     val goals: FixtureGoals
 )
