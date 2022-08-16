@@ -18,5 +18,5 @@ val repositoryModule = module {
     }
     factory { LeagueDtoMapper() }
     factory { TeamDtoMapper() }
-    factory { FixtureDtoMapper(get()) }
+    factory { FixtureDtoMapper(get(), get()) }
 }
