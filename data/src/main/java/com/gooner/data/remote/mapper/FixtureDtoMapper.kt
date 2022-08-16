@@ -8,12 +8,15 @@ import com.gooner.domain.model.FixtureStatus as FixtureStatusDomain
 import com.gooner.domain.model.Goals
 
 class FixtureDtoMapper(
-    private val teamDtoMapper: TeamDtoMapper
+    private val teamDtoMapper: TeamDtoMapper,
+    private val leagueDtoMapper: LeagueDtoMapper
 ) : EntityMapper<FixtureResponseInfo, Fixture> {
     override fun mapFromEntity(entity: FixtureResponseInfo): Fixture =
         Fixture(
             id = entity.fixture.id,
-            league = entity.league,
+            league = leagueDtoMapper.mapFromEntity(
+                LeagueInfo(entity.league)
+            ),
             goals = Goals(home = entity.goals.home, away = entity.goals.away),
             teams = FixtureTeamsDomain(
                 home = teamDtoMapper.mapFromEntity(entity.teams.home),
@@ -41,7 +44,12 @@ class FixtureDtoMapper(
                 home = teamDtoMapper.mapToEntity(model.teams.home),
                 away = teamDtoMapper.mapToEntity(model.teams.away)
             ),
-            league = model.league
+            league = LeagueDto(
+                id = model.league.id,
+                name = model.league.name,
+                logoUrl = model.league.logoUrl ?: "",
+                type = model.league.type ?: ""
+            )
         )
 
     override fun mapFromEntityList(entities: List<FixtureResponseInfo>): List<Fixture> =
