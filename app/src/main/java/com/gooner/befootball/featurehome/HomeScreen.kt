@@ -37,7 +37,9 @@ import com.gooner.domain.usecases.GetLiveMatches
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onAllLiveMatchesClicked: () -> Unit
+) {
 
     val context = LocalContext.current
     val homeScreenViewModel = getViewModel<HomeScreenViewModel>()
@@ -61,7 +63,9 @@ fun HomeScreen() {
     ) {
         AppLogoContainer()
         LiveMatchesLeagues(leagues = leagues)
-        LiveMatches(liveMatches = liveMatches)
+        LiveMatches(liveMatches = liveMatches) {
+            onAllLiveMatchesClicked()
+        }
     }
 
 }
@@ -176,7 +180,8 @@ fun LeagueIcon(
 
 @Composable
 fun LiveMatches(
-    liveMatches: List<Fixture>
+    liveMatches: List<Fixture>,
+    onAllLiveMatchesClicked: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -194,7 +199,8 @@ fun LiveMatches(
                 color = MaterialTheme.colors.onPrimary
             )
             Text(
-                modifier = Modifier.padding(end = 16.dp),
+                modifier = Modifier.padding(end = 16.dp)
+                    .clickable { onAllLiveMatchesClicked() },
                 text = stringResource(id = R.string.all_matches),
                 style = typography.body2,
                 color = MaterialTheme.colors.onPrimary
@@ -386,5 +392,5 @@ fun TeamScore(
 @Preview(showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen { }
 }
