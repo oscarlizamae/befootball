@@ -1,5 +1,6 @@
 package com.gooner.befootball.ui.theme
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
@@ -8,12 +9,17 @@ import androidx.compose.runtime.Composable
 
 private val DarkColorPalette = darkColors(
     primary = ColorPrimaryDark,
-    primaryVariant = ColorVariantDark
+    primaryVariant = ColorVariantDark,
+    background = BackgroundColorDark,
+    onPrimary = ColorTextPrimaryDark
 )
 
+@SuppressLint("ConflictingOnColor")
 private val LightColorPalette = lightColors(
     primary = ColorPrimaryLight,
-    primaryVariant = ColorVariantLight
+    primaryVariant = ColorVariantLight,
+    background = BackgroundColorLight,
+    onPrimary = ColorTextPrimaryLight
 
     /* Other default colors to override
     background = Color.White,

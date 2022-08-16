@@ -3,6 +3,13 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdk 32
+    defaultConfig {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
+        buildConfigField "String", "API_FOOTBALL_KEY", "\"${properties.getProperty("API_FOOTBALL_KEY")}\""
+        buildConfigField "String", "API_FOOTBALL_HOST", "\"${properties.getProperty("API_FOOTBALL_HOST")}\""
+    }
 }
 
 java {
