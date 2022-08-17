@@ -48,13 +48,15 @@ fun RegularTopAppBar(
             IconButton(onClick = { onBackIconClick() }) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_back_arrow),
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = Color.Black
                 )
             }
             Text(
                 modifier = Modifier.padding(start = 24.dp),
                 text = title,
-                style = typography.h6
+                style = typography.h6,
+                color = Color.Black
             )
         }
     }
