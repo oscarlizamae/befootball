@@ -7,6 +7,7 @@ val LiveMatchesLeagueColor = Color(0xFF262626)
 val LiveMatchCardColor = Color(0xFF2648D1)
 val IndicatorCircleGreen = Color(0xFF33FF00)
 val IndicatorCircleYellow = Color(0xFFFBC02D)
+val PinkColor = Color(0xFFFE036A)
 
 // Colors LightTheme
 val ColorPrimaryLight = Color(0xFFFFFFFF)
