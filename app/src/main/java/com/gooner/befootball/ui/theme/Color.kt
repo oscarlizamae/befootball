@@ -3,7 +3,7 @@ package com.gooner.befootball.ui.theme
 import androidx.compose.ui.graphics.Color
 
 // Colors for both Light&Dark Theme
-val LiveMatchesLeagueColor = Color(0xFF262626)
+val LiveMatchesLeagueColor = Color(0xFFF5F5F5)
 val LiveMatchCardColor = Color(0xFF2648D1)
 val IndicatorCircleGreen = Color(0xFF33FF00)
 val IndicatorCircleYellow = Color(0xFFFBC02D)
