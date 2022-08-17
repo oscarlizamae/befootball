@@ -64,28 +64,22 @@ fun LiveFixtures(
 
 @Composable
 fun LiveFixtureDetail(fixture: Fixture) {
-    Column(
+    Row(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(start = 16.dp, end = 16.dp)
+            .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
+            .fillMaxSize(),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier
-                .padding(top = 8.dp, bottom = 8.dp)
-                .fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier.weight(3f)
         ) {
-            Column(
-                modifier = Modifier.weight(3f)
-            ) {
-                FixtureTeamsDetails(teams = fixture.teams, fixtureScore = fixture.goals)
-            }
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                FixtureStatus(status = fixture.status)
-            }
+            FixtureTeamsDetails(teams = fixture.teams, fixtureScore = fixture.goals)
+        }
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            FixtureStatus(status = fixture.status)
         }
     }
 }
