@@ -111,7 +111,7 @@ fun LiveMatchesLeagues(
                     bottom = 8.dp
                 ),
             text = stringResource(id = R.string.live_matches),
-            color = Color.White,
+            color = MaterialTheme.colors.onPrimary,
             style = typography.h6
         )
         LiveMatchesLeaguesContent(leagues = leagues)
@@ -158,7 +158,8 @@ fun LeagueIcon(
         modifier = Modifier
             .padding(top = 8.dp, start = 12.dp, bottom = 24.dp, end = 4.dp)
             .clip(CircleShape)
-            .background(Color(0xFFcfd8dc))
+            .clickable {  }
+            //.background(Color(0xFFcfd8dc))
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -169,7 +170,6 @@ fun LeagueIcon(
             modifier = Modifier
                 .padding(8.dp)
                 .size(72.dp)
-                .clickable { }
                 .background(Color.Transparent),
             contentScale = ContentScale.Inside,
         )
