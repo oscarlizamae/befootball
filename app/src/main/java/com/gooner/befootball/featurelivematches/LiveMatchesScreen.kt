@@ -56,8 +56,10 @@ fun LiveFixtures(
                 LiveFixtureDetail(fixture = fixture)
             }
             if (index < fixtures.size - 1)
-                Divider(Modifier.height(1.dp)
-                    .padding(start = 16.dp, end = 16.dp))
+                Divider(
+                    Modifier
+                        .height(1.dp)
+                        .padding(start = 16.dp, end = 16.dp))
         }
     }
 }
@@ -67,7 +69,7 @@ fun LiveFixtureDetail(fixture: Fixture) {
     Row(
         modifier = Modifier
             .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
-            .fillMaxSize(),
+            .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
@@ -75,6 +77,12 @@ fun LiveFixtureDetail(fixture: Fixture) {
         ) {
             FixtureTeamsDetails(teams = fixture.teams, fixtureScore = fixture.goals)
         }
+        Divider(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(top = 8.dp, bottom = 8.dp)
+                .width(1.dp)
+        )
         Column(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -160,7 +168,7 @@ fun FixtureStatus(
         }  else { "${status.elapsed}\'" },
         style = MaterialTheme.typography.body2,
         color = if (status.short == "HT") { Color.LightGray } else { PinkColor },
-        fontWeight = if (status.short == "HT") { FontWeight.Bold } else { FontWeight.Medium },
+        fontWeight = if (status.short == "HT") { FontWeight.Medium } else { FontWeight.Bold },
         modifier = Modifier.padding(top = 6.dp)
     )
 }
