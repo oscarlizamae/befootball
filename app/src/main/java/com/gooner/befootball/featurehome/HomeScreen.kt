@@ -21,7 +21,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,7 +32,6 @@ import com.gooner.befootball.ui.theme.*
 import com.gooner.befootball.util.BarsColors
 import com.gooner.befootball.util.CircleShimmer
 import com.gooner.domain.model.*
-import com.gooner.domain.usecases.GetLiveMatches
 import org.koin.androidx.compose.getViewModel
 
 @Composable
