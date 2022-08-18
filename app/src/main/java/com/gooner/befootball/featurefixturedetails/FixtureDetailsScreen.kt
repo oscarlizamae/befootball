@@ -8,6 +8,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,12 +20,17 @@ import com.gooner.befootball.ui.theme.FixtureDetailsHeadingCardColor
 import com.gooner.befootball.R
 import com.gooner.befootball.util.BarsColors
 import com.gooner.befootball.util.GameStatusIndicator
+import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun FixtureDetailsScreen(
     fixtureId: Int,
     onBackButtonClicked: () -> Unit
 ) {
+    val fixtureDetailsViewModel = getViewModel<FixtureDetailsViewModel>()
+    LaunchedEffect(key1 = true) {
+        fixtureDetailsViewModel.fetchFixtureDetails(fixtureId)
+    }
     BarsColors(statusBarColor = FixtureDetailsHeadingCardColor)
     Column(
         modifier = Modifier
@@ -78,7 +84,8 @@ fun FixtureDetailsHeadingCard(
                     textAlign = TextAlign.Center
                 )
                 Column(
-                    Modifier.weight(1f)
+                    Modifier
+                        .weight(1f)
                         .padding(end = 8.dp),
                     horizontalAlignment = Alignment.End
                 ) {
