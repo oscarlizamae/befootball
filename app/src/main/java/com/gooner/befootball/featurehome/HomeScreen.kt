@@ -33,6 +33,7 @@ import com.gooner.befootball.R
 import com.gooner.befootball.ui.theme.*
 import com.gooner.befootball.util.BarsColors
 import com.gooner.befootball.util.CircleShimmer
+import com.gooner.befootball.util.CustomSubcomposeAsyncImage
 import com.gooner.domain.model.*
 import org.koin.androidx.compose.getViewModel
 
@@ -167,15 +168,10 @@ fun LeagueIcon(
             .clickable { }
             //.background(Color(0xFFcfd8dc))
     ) {
-        SubcomposeAsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(logoUrl)
-                .build(),
+        CustomSubcomposeAsyncImage(
+            context = LocalContext.current,
+            url = logoUrl,
             contentDescription = leagueName,
-            loading = {
-                CircularProgressIndicator(
-                    color = ColorCircleProgressBarLeagues
-                )},
             modifier = Modifier
                 .padding(8.dp)
                 .size(72.dp)
