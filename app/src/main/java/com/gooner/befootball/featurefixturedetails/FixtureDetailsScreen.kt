@@ -22,7 +22,8 @@ import com.gooner.befootball.util.GameStatusIndicator
 
 @Composable
 fun FixtureDetailsScreen(
-    fixtureId: Int
+    fixtureId: Int,
+    onBackButtonClicked: () -> Unit
 ) {
     BarsColors(statusBarColor = FixtureDetailsHeadingCardColor)
     Column(
