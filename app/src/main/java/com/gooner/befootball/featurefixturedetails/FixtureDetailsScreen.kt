@@ -9,6 +9,8 @@ import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +30,7 @@ fun FixtureDetailsScreen(
     onBackButtonClicked: () -> Unit
 ) {
     val fixtureDetailsViewModel = getViewModel<FixtureDetailsViewModel>()
+    val fixture by remember { fixtureDetailsViewModel.fixture }
     LaunchedEffect(key1 = true) {
         fixtureDetailsViewModel.fetchFixtureDetails(fixtureId)
     }
@@ -60,38 +63,49 @@ fun FixtureDetailsHeadingCard(
         Column(
             modifier = Modifier.padding(top = 16.dp, start = 8.dp, end = 8.dp, bottom = 16.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(
-                    onClick = { onBackButtonClicked() },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_arrow_back_secondary),
-                        contentDescription = "",
-                        tint = Color.White,
-                        modifier = Modifier.padding(start = 8.dp)
-                    )
-                }
-                Text(
-                    text = competition,
-                    color = Color.White,
-                    style = typography.body2,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(3f),
-                    textAlign = TextAlign.Center
-                )
-                Column(
-                    Modifier
-                        .weight(1f)
-                        .padding(end = 8.dp),
-                    horizontalAlignment = Alignment.End
-                ) {
-                    GameStatusIndicator(status = status)
-                }
+            FixtureGeneralInfo(competition, status) {
+                onBackButtonClicked()
             }
+        }
+    }
+}
+
+@Composable
+fun FixtureGeneralInfo(
+    competition: String,
+    status: String,
+    onBackButtonClicked: () -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        IconButton(
+            onClick = { onBackButtonClicked() },
+            modifier = Modifier.weight(1f)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_arrow_back_secondary),
+                contentDescription = "",
+                tint = Color.White,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+        Text(
+            text = competition,
+            color = Color.White,
+            style = typography.body2,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.weight(3f),
+            textAlign = TextAlign.Center
+        )
+        Column(
+            Modifier
+                .weight(1f)
+                .padding(end = 8.dp),
+            horizontalAlignment = Alignment.End
+        ) {
+            GameStatusIndicator(status = status)
         }
     }
 }
