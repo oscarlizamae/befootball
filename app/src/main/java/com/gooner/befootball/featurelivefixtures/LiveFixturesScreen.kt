@@ -1,5 +1,6 @@
 package com.gooner.befootball.featurelivefixtures
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -30,7 +31,8 @@ import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun LiveFixturesScreen(
-    onBackIconClicked: () -> Unit
+    onBackIconClicked: () -> Unit,
+    onFixtureClicked: (Int) -> Unit
 ) {
 
     val liveMatchesViewModel = getViewModel<LiveFixturesViewModel>()
@@ -44,18 +46,23 @@ fun LiveFixturesScreen(
         RegularTopAppBar(title = stringResource(id = R.string.live_matches)) {
             onBackIconClicked()
         }
-        LiveFixturesContainer(fixtures = liveMatches)
+        LiveFixturesContainer(fixtures = liveMatches) {
+            onFixtureClicked(it)
+        }
     }
 }
 
 @Composable
 fun LiveFixturesContainer(
-    fixtures: List<Fixture>
+    fixtures: List<Fixture>,
+    onFixtureClicked: (Int) -> Unit
 ) {
     LazyColumn {
         itemsIndexed(fixtures) { index, fixture ->
             Row {
-                LiveFixtureDetail(fixture = fixture)
+                LiveFixtureDetail(fixture = fixture) {
+                    onFixtureClicked(it)
+                }
             }
             if (index < fixtures.size - 1)
                 Divider(
@@ -67,11 +74,15 @@ fun LiveFixturesContainer(
 }
 
 @Composable
-fun LiveFixtureDetail(fixture: Fixture) {
+fun LiveFixtureDetail(
+    fixture: Fixture,
+    onFixtureClicked: (Int) -> Unit
+) {
     Row(
         modifier = Modifier
             .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
-            .height(IntrinsicSize.Min),
+            .height(IntrinsicSize.Min)
+            .clickable { onFixtureClicked(fixture.id) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
