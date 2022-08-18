@@ -1,11 +1,14 @@
 package com.gooner.befootball
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.gooner.befootball.featurehome.HomeScreen
 import com.gooner.befootball.featurelivefixtures.LiveFixturesScreen
+import com.gooner.befootball.feaurefixturedetails.FixtureDetailsScreen
 import com.gooner.befootball.splashscreen.AnimatedSplashScreen
 
 @Composable
@@ -21,15 +24,36 @@ fun Navigation() {
         }
         // Navigation to HomeScreen
         composable(Screen.HomeScreen.route) {
-            HomeScreen {
-                navController.navigate(Screen.LiveMatches.route)
+            HomeScreen(
+                onAllLiveMatchesClicked = { navController.navigate(Screen.LiveMatches.route) }
+            ) { fixtureId ->
+                navController.navigate(
+                    Screen.FixtureDetails.withArgs(fixtureId.toString())
+                )
             }
         }
         // Navigation to LiveMatches Screen
         composable(Screen.LiveMatches.route) {
-            LiveFixturesScreen {
-                navController.navigateUp()
+            LiveFixturesScreen(
+                onBackIconClicked = { navController.navigateUp() }
+            ) { fixtureId ->
+                navController.navigate(
+                    Screen.FixtureDetails.withArgs(fixtureId.toString())
+                )
             }
+        }
+        // Navigation to FixtureDetails Screen
+        composable(
+            Screen.FixtureDetails.route + "/{fixtureId}",
+            arguments = listOf(
+                navArgument("fixtureId") {
+                    type = NavType.IntType
+                }
+            )
+        ) { entry ->
+            FixtureDetailsScreen(
+                fixtureId = entry.arguments?.getInt("fixtureId") ?: 0
+            )
         }
     }
 }
