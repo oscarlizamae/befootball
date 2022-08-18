@@ -229,9 +229,6 @@ fun LiveMatchesContainer(
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState())
     ) {
-        /* for (i in 1..5) {
-            LiveMatchCard(color = color)
-        } */
         liveMatches.forEachIndexed { index, fixture ->
             if (index < 10) {
                 LiveMatchCard(
