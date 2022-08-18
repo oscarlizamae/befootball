@@ -5,4 +5,5 @@ import com.gooner.domain.util.ResponseResult
 
 interface FixtureRepository {
     suspend fun getLiveFixtures(): ResponseResult<List<Fixture>>
+    suspend fun getFixtureDetails(fixtureId: Int): ResponseResult<Fixture>
 }
