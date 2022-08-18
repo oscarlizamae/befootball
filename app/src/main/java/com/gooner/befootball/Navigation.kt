@@ -53,7 +53,9 @@ fun Navigation() {
         ) { entry ->
             FixtureDetailsScreen(
                 fixtureId = entry.arguments?.getInt("fixtureId") ?: 0
-            )
+            ) {
+                navController.navigateUp()
+            }
         }
     }
 }
