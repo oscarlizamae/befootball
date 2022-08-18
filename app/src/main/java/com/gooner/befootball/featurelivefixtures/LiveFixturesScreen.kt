@@ -44,12 +44,12 @@ fun LiveFixturesScreen(
         RegularTopAppBar(title = stringResource(id = R.string.live_matches)) {
             onBackIconClicked()
         }
-        LiveFixtures(fixtures = liveMatches)
+        LiveFixturesContainer(fixtures = liveMatches)
     }
 }
 
 @Composable
-fun LiveFixtures(
+fun LiveFixturesContainer(
     fixtures: List<Fixture>
 ) {
     LazyColumn {
