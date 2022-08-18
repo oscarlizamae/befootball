@@ -9,7 +9,7 @@ import com.gooner.domain.usecases.GetLiveMatches
 import com.gooner.domain.util.ResponseResult
 import kotlinx.coroutines.launch
 
-class LiveMatchesViewModel(
+class LiveFixturesViewModel(
     private val getLiveMatches: GetLiveMatches
 ) : ViewModel() {
 

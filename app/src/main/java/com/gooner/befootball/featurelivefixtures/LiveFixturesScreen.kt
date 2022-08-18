@@ -33,7 +33,7 @@ fun LiveFixturesScreen(
     onBackIconClicked: () -> Unit
 ) {
 
-    val liveMatchesViewModel = getViewModel<LiveMatchesViewModel>()
+    val liveMatchesViewModel = getViewModel<LiveFixturesViewModel>()
     val liveMatches by remember { liveMatchesViewModel.liveMatches }
 
     LaunchedEffect(key1 = true) {
