@@ -1,14 +1,11 @@
 package com.gooner.befootball
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.gooner.befootball.featurehome.HomeScreen
-import com.gooner.befootball.featurelivematches.LiveMatchesScreen
+import com.gooner.befootball.featurelivefixtures.LiveMatchesScreen
 import com.gooner.befootball.splashscreen.AnimatedSplashScreen
 
 @Composable
