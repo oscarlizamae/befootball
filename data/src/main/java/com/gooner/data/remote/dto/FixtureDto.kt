@@ -10,11 +10,14 @@ data class FixtureResponseInfo(
     val fixture: FixtureDto,
     val league: LeagueDto,
     val teams: FixtureTeams,
-    val goals: FixtureGoals
+    val goals: FixtureGoals,
+    val events: List<EventDto>
 )
 
 data class FixtureDto(
     val id: Int,
+    val referee: String? = "",
+    val venue: VenueDto,
     val status: FixtureStatus
 )
 
@@ -32,4 +35,10 @@ data class FixtureStatus(
 data class FixtureGoals(
     val home: Int,
     val away: Int
+)
+
+data class VenueDto(
+    val id: Int?,
+    val name: String?,
+    val city: String?
 )
