@@ -33,14 +33,17 @@ fun FixtureDetailsScreen(
         FixtureDetailsHeadingCard(
             competition = "UEFA Conference League",
             status = "FH"
-        )
+        ) {
+            onBackButtonClicked()
+        }
     }
 }
 
 @Composable
 fun FixtureDetailsHeadingCard(
     competition: String,
-    status: String
+    status: String,
+    onBackButtonClicked: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -56,7 +59,7 @@ fun FixtureDetailsHeadingCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(
-                    onClick = { },
+                    onClick = { onBackButtonClicked() },
                     modifier = Modifier.weight(1f)
                 ) {
                     Icon(
