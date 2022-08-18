@@ -38,7 +38,8 @@ import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun HomeScreen(
-    onAllLiveMatchesClicked: () -> Unit
+    onAllLiveMatchesClicked: () -> Unit,
+    onFixtureCardClicked: (Int) -> Unit
 ) {
 
     val context = LocalContext.current
@@ -63,8 +64,11 @@ fun HomeScreen(
     ) {
         AppLogoContainer()
         LiveMatchesLeagues(leagues = leagues)
-        LiveMatches(liveMatches = liveMatches) {
-            onAllLiveMatchesClicked()
+        LiveMatches(
+            liveMatches = liveMatches,
+            onAllLiveMatchesClicked = { onAllLiveMatchesClicked() }
+        ) {
+            onFixtureCardClicked(it)
         }
     }
 
@@ -184,7 +188,8 @@ fun LeagueIcon(
 @Composable
 fun LiveMatches(
     liveMatches: List<Fixture>,
-    onAllLiveMatchesClicked: () -> Unit
+    onAllLiveMatchesClicked: () -> Unit,
+    onFixtureCardClicked: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -215,14 +220,17 @@ fun LiveMatches(
         LiveMatchesContainer(
             liveMatches = liveMatches,
             color = LiveMatchCardColor
-        )
+        ) {
+            onFixtureCardClicked(it)
+        }
     }
 }
 
 @Composable
 fun LiveMatchesContainer(
     liveMatches: List<Fixture>,
-    color: Color
+    color: Color,
+    onFixtureCardClicked: (Int) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -234,7 +242,9 @@ fun LiveMatchesContainer(
                 LiveMatchCard(
                     fixture = fixture,
                     color = color
-                )
+                ) {
+                    onFixtureCardClicked(it)
+                }
             }
         }
     }
@@ -243,7 +253,8 @@ fun LiveMatchesContainer(
 @Composable
 fun LiveMatchCard(
     fixture: Fixture,
-    color: Color
+    color: Color,
+    onFixtureCardClicked: (Int) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth()
@@ -252,7 +263,7 @@ fun LiveMatchCard(
             modifier = Modifier
                 .padding(end = 16.dp, top = 8.dp)
                 .fillMaxWidth()
-                .clickable { }
+                .clickable { onFixtureCardClicked(fixture.id) }
                 .widthIn(0.dp, 130.dp),
             shape = RoundedCornerShape(8.dp),
             backgroundColor = color
@@ -395,5 +406,5 @@ fun TeamScore(
 @Preview(showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen { }
+    HomeScreen({ }) { }
 }
