@@ -6,10 +6,12 @@ import com.gooner.domain.model.Fixture
 import com.gooner.domain.model.FixtureTeams as FixtureTeamsDomain
 import com.gooner.domain.model.FixtureStatus as FixtureStatusDomain
 import com.gooner.domain.model.Goals
+import com.gooner.domain.model.Venue
 
 class FixtureDtoMapper(
     private val teamDtoMapper: TeamDtoMapper,
-    private val leagueDtoMapper: LeagueDtoMapper
+    private val leagueDtoMapper: LeagueDtoMapper,
+    private val eventDtoMapper: EventDtoMapper
 ) : EntityMapper<FixtureResponseInfo, Fixture> {
     override fun mapFromEntity(entity: FixtureResponseInfo): Fixture =
         Fixture(
@@ -26,10 +28,17 @@ class FixtureDtoMapper(
                 long = entity.fixture.status.long,
                 short = entity.fixture.status.short,
                 elapsed = entity.fixture.status.elapsed
-            )
+            ),
+            referee = entity.fixture.referee,
+            venue = Venue(
+                id = entity.fixture.id,
+                name = entity.fixture.venue.name ?: "",
+                city = entity.fixture.venue.city ?: ""
+            ),
+            events = eventDtoMapper.mapFromEntityList(entity.events)
         )
 
-    override fun mapToEntity(model: Fixture): FixtureResponseInfo =
+    /* override fun mapToEntity(model: Fixture): FixtureResponseInfo =
         FixtureResponseInfo(
             fixture = FixtureDto(
                 id = model.id,
@@ -50,7 +59,7 @@ class FixtureDtoMapper(
                 logoUrl = model.league.logoUrl ?: "",
                 type = model.league.type ?: ""
             )
-        )
+        ) */
 
     override fun mapFromEntityList(entities: List<FixtureResponseInfo>): List<Fixture> =
         entities.map { mapFromEntity(it) }
