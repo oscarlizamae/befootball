@@ -1,4 +1,4 @@
-package com.gooner.befootball.featurelivematches
+package com.gooner.befootball.featurelivefixtures
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf

@@ -1,4 +1,4 @@
-package com.gooner.befootball.featurelivematches
+package com.gooner.befootball.featurelivefixtures
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
