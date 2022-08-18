@@ -1,6 +1,7 @@
 package com.gooner.befootball.featurelivefixtures
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -25,6 +26,9 @@ import coil.request.ImageRequest
 import com.gooner.befootball.ui.theme.ColorTextPrimaryLight
 import com.gooner.befootball.ui.theme.PinkColor
 import com.gooner.befootball.R
+import com.gooner.befootball.ui.theme.StatusBarColorDark
+import com.gooner.befootball.ui.theme.StatusBarColorLight
+import com.gooner.befootball.util.BarsColors
 import com.gooner.befootball.util.RegularTopAppBar
 import com.gooner.domain.model.*
 import org.koin.androidx.compose.getViewModel
@@ -42,6 +46,9 @@ fun LiveFixturesScreen(
         liveMatchesViewModel.fetchLiveMatches()
     }
 
+    BarsColors(
+        statusBarColor = if (isSystemInDarkTheme()) StatusBarColorDark else StatusBarColorLight
+    )
     Column {
         RegularTopAppBar(title = stringResource(id = R.string.live_matches)) {
             onBackIconClicked()
