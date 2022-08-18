@@ -1,8 +1,6 @@
 package com.gooner.data.di
 
-import com.gooner.data.remote.mapper.FixtureDtoMapper
-import com.gooner.data.remote.mapper.LeagueDtoMapper
-import com.gooner.data.remote.mapper.TeamDtoMapper
+import com.gooner.data.remote.mapper.*
 import com.gooner.data.repository.FixtureRepositoryImpl
 import com.gooner.data.repository.LeagueRepositoryImpl
 import com.gooner.domain.repository.FixtureRepository
@@ -18,5 +16,7 @@ val repositoryModule = module {
     }
     factory { LeagueDtoMapper() }
     factory { TeamDtoMapper() }
-    factory { FixtureDtoMapper(get(), get()) }
+    factory { PlayerDtoMapper() }
+    factory { EventDtoMapper(get(), get()) }
+    factory { FixtureDtoMapper(get(), get(), get()) }
 }
