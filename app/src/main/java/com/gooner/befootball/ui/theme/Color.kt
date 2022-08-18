@@ -18,6 +18,7 @@ val NavigationBarColorLight = Color(0xFFEAEAEA)
 val LogoColorLight = Color(0xFF000000)
 val BackgroundColorLight = Color(0xFFFFFFFF)
 val ColorTextPrimaryLight = Color(0xFF3A3E4B)
+val ColorCircleProgressBarLeagues = Color(0xFF3A3E4B)
 
 
 // Colors DarkTheme
