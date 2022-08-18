@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Text
@@ -26,6 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.gooner.befootball.R
 import com.gooner.befootball.ui.theme.*
@@ -110,7 +112,7 @@ fun LiveMatchesLeagues(
                     top = 24.dp,
                     bottom = 8.dp
                 ),
-            text = stringResource(id = R.string.live_matches),
+            text = stringResource(id = R.string.live_matches_from_leagues),
             color = MaterialTheme.colors.onPrimary,
             style = typography.h6
         )
@@ -158,15 +160,18 @@ fun LeagueIcon(
         modifier = Modifier
             .padding(top = 8.dp, start = 12.dp, bottom = 24.dp, end = 4.dp)
             .clip(CircleShape)
-            .clickable {  }
+            .clickable { }
             //.background(Color(0xFFcfd8dc))
     ) {
-        AsyncImage(
+        SubcomposeAsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(logoUrl)
                 .build(),
             contentDescription = leagueName,
-            placeholder = painterResource(id = R.drawable.ic_uefa_europa_league),
+            loading = {
+                CircularProgressIndicator(
+                    color = ColorCircleProgressBarLeagues
+                )},
             modifier = Modifier
                 .padding(8.dp)
                 .size(72.dp)
@@ -197,7 +202,8 @@ fun LiveMatches(
                 color = MaterialTheme.colors.onPrimary
             )
             Text(
-                modifier = Modifier.padding(end = 16.dp)
+                modifier = Modifier
+                    .padding(end = 16.dp)
                     .clickable { onAllLiveMatchesClicked() },
                 text = stringResource(id = R.string.all_matches),
                 style = typography.body2,
