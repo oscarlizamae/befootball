@@ -7,8 +7,8 @@ import com.gooner.domain.model.Player
 class PlayerDtoMapper : EntityMapper<PlayerDto, Player> {
     override fun mapFromEntity(entity: PlayerDto): Player =
         Player(
-            id = entity.id,
-            name = entity.name
+            id = entity.id ?: 0,
+            name = entity.name ?: ""
         )
 
     /* override fun mapToEntity(model: Player): PlayerDto =
