@@ -21,6 +21,7 @@ class FixtureDetailsViewModel(
             when (val result = getFixtureDetails(fixtureId)) {
                 is ResponseResult.Success -> {
                     Log.d("FixtureDetails", result.data.toString())
+                    fixture.value = result.data
                 }
                 is ResponseResult.Error -> {
                     Log.d("FixtureDetails", result.toString())
