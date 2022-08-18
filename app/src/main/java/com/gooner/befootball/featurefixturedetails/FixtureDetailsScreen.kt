@@ -1,5 +1,6 @@
 package com.gooner.befootball.featurefixturedetails
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -14,14 +15,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.gooner.befootball.ui.theme.FixtureDetailsHeadingCardColor
 import com.gooner.befootball.R
+import com.gooner.befootball.ui.theme.ColorTextPrimaryDark
+import com.gooner.befootball.ui.theme.ColorTextPrimaryLight
 import com.gooner.befootball.util.BarsColors
+import com.gooner.befootball.util.CustomSubcomposeAsyncImage
 import com.gooner.befootball.util.GameStatusIndicator
+import com.gooner.domain.model.Fixture
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -39,11 +47,14 @@ fun FixtureDetailsScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        FixtureDetailsHeadingCard(
-            competition = "UEFA Conference League",
-            status = "FH"
-        ) {
-            onBackButtonClicked()
+        fixture?.let {
+            FixtureDetailsHeadingCard(
+                competition = fixture?.league?.name ?: "",
+                status = fixture?.status?.short ?: "",
+                fixture = it
+            ) {
+                onBackButtonClicked()
+            }
         }
     }
 }
@@ -52,6 +63,7 @@ fun FixtureDetailsScreen(
 fun FixtureDetailsHeadingCard(
     competition: String,
     status: String,
+    fixture: Fixture,
     onBackButtonClicked: () -> Unit
 ) {
     Card(
@@ -66,6 +78,7 @@ fun FixtureDetailsHeadingCard(
             FixtureGeneralInfo(competition, status) {
                 onBackButtonClicked()
             }
+            FixtureInfo(fixture = fixture)
         }
     }
 }
@@ -106,6 +119,92 @@ fun FixtureGeneralInfo(
             horizontalAlignment = Alignment.End
         ) {
             GameStatusIndicator(status = status)
+        }
+    }
+}
+
+@Composable
+fun FixtureInfo(
+    fixture: Fixture
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min)
+            .padding(top = 12.dp, start = 16.dp, bottom = 8.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CustomSubcomposeAsyncImage(
+                context = LocalContext.current,
+                url = fixture.teams.home.logoUrl,
+                contentDescription = fixture.teams.home.name,
+                contentScale = ContentScale.Inside,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(60.dp)
+                    .background(Color.Transparent)
+            )
+            Text(
+                text = fixture.teams.home.name,
+                style = typography.body1,
+                color = ColorTextPrimaryDark,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        }
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "${fixture.goals.home} - ${fixture.goals.away}",
+                style = typography.h3,
+                color = ColorTextPrimaryDark,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "${fixture.status.elapsed}\'",
+                style = typography.h6,
+                color = ColorTextPrimaryDark,
+                fontWeight = FontWeight.Normal
+            )
+        }
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CustomSubcomposeAsyncImage(
+                context = LocalContext.current,
+                url = fixture.teams.away.logoUrl,
+                contentDescription = fixture.teams.away.name,
+                contentScale = ContentScale.Inside,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(60.dp)
+                    .background(Color.Transparent)
+            )
+            Text(
+                text = fixture.teams.away.name,
+                style = typography.body2,
+                color = ColorTextPrimaryDark,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
