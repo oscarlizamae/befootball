@@ -146,7 +146,7 @@ fun LiveMatchesLeaguesContent(
             leagues.forEachIndexed { index, league ->
                 if (index < 10) {
                     LeagueIcon(
-                        leagueName = league.name,
+                        leagueName = league.name ?: "",
                         logoUrl = league.logoUrl ?: "https://images.matematego.com/assets/noimage-cf86abd9b579765c1131ec86cb1e70052199ddadfecf252e5cb98e50535d11f3.png"
                     )
                 }
