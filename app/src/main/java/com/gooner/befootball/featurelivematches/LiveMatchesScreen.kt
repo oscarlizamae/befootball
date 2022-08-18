@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -22,6 +23,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.gooner.befootball.ui.theme.ColorTextPrimaryLight
 import com.gooner.befootball.ui.theme.PinkColor
+import com.gooner.befootball.R
 import com.gooner.befootball.util.RegularTopAppBar
 import com.gooner.domain.model.*
 import org.koin.androidx.compose.getViewModel
@@ -39,7 +41,7 @@ fun LiveMatchesScreen(
     }
 
     Column {
-        RegularTopAppBar(title = "Live matches") {
+        RegularTopAppBar(title = stringResource(id = R.string.live_matches)) {
             onBackIconClicked()
         }
         LiveFixtures(fixtures = liveMatches)
