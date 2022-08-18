@@ -201,14 +201,16 @@ fun LiveMatches(
                 style = typography.h6,
                 color = MaterialTheme.colors.onPrimary
             )
-            Text(
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .clickable { onAllLiveMatchesClicked() },
-                text = stringResource(id = R.string.all_matches),
-                style = typography.body2,
-                color = MaterialTheme.colors.onPrimary
-            )
+            if (liveMatches.size > 9) {
+                Text(
+                    modifier = Modifier
+                        .padding(end = 16.dp)
+                        .clickable { onAllLiveMatchesClicked() },
+                    text = stringResource(id = R.string.all_matches),
+                    style = typography.body2,
+                    color = MaterialTheme.colors.onPrimary
+                )
+            }
         }
         LiveMatchesContainer(
             liveMatches = liveMatches,
