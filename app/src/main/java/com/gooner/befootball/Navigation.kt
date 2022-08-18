@@ -5,7 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.gooner.befootball.featurehome.HomeScreen
-import com.gooner.befootball.featurelivefixtures.LiveMatchesScreen
+import com.gooner.befootball.featurelivefixtures.LiveFixturesScreen
 import com.gooner.befootball.splashscreen.AnimatedSplashScreen
 
 @Composable
@@ -27,7 +27,7 @@ fun Navigation() {
         }
         // Navigation to LiveMatches Screen
         composable(Screen.LiveMatches.route) {
-            LiveMatchesScreen {
+            LiveFixturesScreen {
                 navController.navigateUp()
             }
         }

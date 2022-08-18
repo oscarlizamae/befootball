@@ -29,7 +29,7 @@ import com.gooner.domain.model.*
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun LiveMatchesScreen(
+fun LiveFixturesScreen(
     onBackIconClicked: () -> Unit
 ) {
 
