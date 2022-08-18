@@ -8,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.gooner.befootball.featurehome.HomeScreen
 import com.gooner.befootball.featurelivefixtures.LiveFixturesScreen
-import com.gooner.befootball.feaurefixturedetails.FixtureDetailsScreen
+import com.gooner.befootball.featurefixturedetails.FixtureDetailsScreen
 import com.gooner.befootball.splashscreen.AnimatedSplashScreen
 
 @Composable
