@@ -1,13 +1,14 @@
 package com.gooner.befootball.featurefixturedetails
 
+import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
+import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.typography
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -15,9 +16,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -29,7 +32,7 @@ import com.gooner.befootball.ui.theme.ColorTextPrimaryLight
 import com.gooner.befootball.util.BarsColors
 import com.gooner.befootball.util.CustomSubcomposeAsyncImage
 import com.gooner.befootball.util.GameStatusIndicator
-import com.gooner.domain.model.Fixture
+import com.gooner.domain.model.*
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -39,6 +42,9 @@ fun FixtureDetailsScreen(
 ) {
     val fixtureDetailsViewModel = getViewModel<FixtureDetailsViewModel>()
     val fixture by remember { fixtureDetailsViewModel.fixture }
+    val homeTeam =  fixture?.teams?.home?.name ?: ""
+    val awayTeam =  fixture?.teams?.away?.name ?: ""
+
     LaunchedEffect(key1 = true) {
         fixtureDetailsViewModel.fetchFixtureDetails(fixtureId)
     }
@@ -55,6 +61,11 @@ fun FixtureDetailsScreen(
             ) {
                 onBackButtonClicked()
             }
+            FixtureInformationEvents(
+                events = it.events,
+                homeTeam = homeTeam,
+                awayTeam = awayTeam
+            )
         }
     }
 }
@@ -205,6 +216,117 @@ fun FixtureInfo(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
+        }
+    }
+}
+
+@Composable
+fun FixtureInformationEvents(
+    events: List<Event>,
+    homeTeam: String,
+    awayTeam: String,
+) {
+    LazyColumn {
+        itemsIndexed(events.reversed()) { index, event ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
+            ) {
+                val iconResource: Int? = when (getEventTypeFilter(event.type ?: "")) {
+                    EventTypeFilter.GOAL -> R.drawable.ic_goal
+                    EventTypeFilter.CARD -> {
+                        when (getEventDetailFilter(event.detail ?: "")) {
+                            EventDetailsFilter.YELLOW_CARD ->
+                                R.drawable.ic_yellow_card
+                            EventDetailsFilter.RED_CARD ->
+                                R.drawable.ic_red_card
+                            EventDetailsFilter.SECOND_YELLOW_CARD ->
+                                R.drawable.ic_double_yellow_card
+                            else -> null
+                        }
+                    }
+                    EventTypeFilter.SUBSTITUTION -> R.drawable.ic_substitution
+                    else -> null
+                }
+
+                if (event.team.name == homeTeam) {
+                    Column(
+                        Modifier.weight(1f)
+                    ) {
+                        EventDetail(event = event, icon = iconResource)
+                    }
+                    Spacer(
+                        modifier = Modifier
+                            .height(IntrinsicSize.Min)
+                            .weight(1f)
+                    )
+                } else if (event.team.name == awayTeam) {
+                    Spacer(
+                        modifier = Modifier
+                            .height(IntrinsicSize.Min)
+                            .weight(1f)
+                    )
+                    Column(
+                        Modifier.weight(1f)
+                    ) {
+                        EventDetail(event = event, icon = iconResource)
+                    }
+                }
+            }
+            if (index < events.size - 1)
+                Divider(
+                    Modifier
+                        .height(1.dp)
+                        .padding(start = 8.dp, end = 8.dp)
+                )
+        }
+    }
+}
+
+@Composable
+fun EventDetail(
+    event: Event,
+    icon: Int? = null
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 4.dp, bottom = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(
+            Modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "${event.time.elapsed}\'",
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                style = typography.body1
+            )
+            icon?.let {
+                Image(
+                    imageVector = ImageVector.vectorResource(
+                        id = it
+                    ),
+                    contentDescription = event.type,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .padding(start = 8.dp, end = 4.dp)
+                )
+            }
+        }
+        Column(
+            modifier = Modifier.weight(2f)
+        ) {
+            Text(
+                text = event.player.name,
+                color = Color.Black,
+                fontWeight = FontWeight.Normal,
+                style = typography.body1,
+            )
+            Text(text = "Assists: No info")
         }
     }
 }
