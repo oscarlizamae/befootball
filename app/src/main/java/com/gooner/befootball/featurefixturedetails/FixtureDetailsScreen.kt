@@ -254,7 +254,10 @@ fun FixtureInformationEvents(
                     Column(
                         Modifier.weight(1f)
                     ) {
-                        EventDetail(event = event, icon = iconResource)
+                        EventDetail(
+                            event = event,
+                            icon = iconResource
+                        )
                     }
                     Spacer(
                         modifier = Modifier
@@ -270,7 +273,10 @@ fun FixtureInformationEvents(
                     Column(
                         Modifier.weight(1f)
                     ) {
-                        EventDetail(event = event, icon = iconResource)
+                        EventDetail(
+                            event = event,
+                            icon = iconResource
+                        )
                     }
                 }
             }
@@ -321,12 +327,19 @@ fun EventDetail(
             modifier = Modifier.weight(2f)
         ) {
             Text(
-                text = event.player.name,
+                text = event.player.name.ifEmpty { "No information" },
                 color = Color.Black,
                 fontWeight = FontWeight.Normal,
                 style = typography.body1,
             )
-            Text(text = "Assists: No info")
+            if (
+                getEventTypeFilter(event.type ?: "") == EventTypeFilter.GOAL
+                || getEventTypeFilter(event.type ?: "") == EventTypeFilter.SUBSTITUTION
+            ) {
+                event.assist.id.let {
+                    Text(text = event.assist.name ?: "No information")
+                }
+            }
         }
     }
 }
