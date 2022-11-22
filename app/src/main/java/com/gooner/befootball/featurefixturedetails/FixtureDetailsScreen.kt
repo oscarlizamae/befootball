@@ -1,6 +1,5 @@
 package com.gooner.befootball.featurefixturedetails
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,14 +20,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.gooner.befootball.ui.theme.FixtureDetailsHeadingCardColor
 import com.gooner.befootball.R
 import com.gooner.befootball.ui.theme.ColorTextPrimaryDark
-import com.gooner.befootball.ui.theme.ColorTextPrimaryLight
 import com.gooner.befootball.util.BarsColors
 import com.gooner.befootball.util.CustomSubcomposeAsyncImage
 import com.gooner.befootball.util.GameStatusIndicator
