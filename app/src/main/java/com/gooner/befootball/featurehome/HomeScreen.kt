@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Text
@@ -27,24 +26,23 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.gooner.befootball.R
 import com.gooner.befootball.ui.theme.*
 import com.gooner.befootball.util.BarsColors
 import com.gooner.befootball.util.CircleShimmer
 import com.gooner.befootball.util.CustomSubcomposeAsyncImage
+import com.gooner.befootball.util.helpers.HomeViewModelPreview
 import com.gooner.domain.model.*
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun HomeScreen(
     onAllLiveMatchesClicked: () -> Unit,
-    onFixtureCardClicked: (Int) -> Unit
+    onFixtureCardClicked: (Int) -> Unit,
+    homeScreenViewModel: IHomeScreenViewModel = getViewModel<HomeScreenViewModel>()
 ) {
 
-    val context = LocalContext.current
-    val homeScreenViewModel = getViewModel<HomeScreenViewModel>()
     val leagues by remember { homeScreenViewModel.leagues }
     val liveMatches by remember { homeScreenViewModel.liveMatches }
 
@@ -399,8 +397,17 @@ fun TeamScore(
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(
+    showSystemUi = true,
+
+)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen({ }) { }
+    BeFootballTheme {
+        HomeScreen(
+            onAllLiveMatchesClicked = { },
+            onFixtureCardClicked = { },
+            homeScreenViewModel = HomeViewModelPreview()
+        )
+    }
 }
