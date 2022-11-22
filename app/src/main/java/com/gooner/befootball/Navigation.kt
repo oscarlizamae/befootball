@@ -25,12 +25,13 @@ fun Navigation() {
         // Navigation to HomeScreen
         composable(Screen.HomeScreen.route) {
             HomeScreen(
-                onAllLiveMatchesClicked = { navController.navigate(Screen.LiveMatches.route) }
-            ) { fixtureId ->
-                navController.navigate(
-                    Screen.FixtureDetails.withArgs(fixtureId.toString())
-                )
-            }
+                onAllLiveMatchesClicked = { navController.navigate(Screen.LiveMatches.route) },
+                onFixtureCardClicked = { fixtureId ->
+                    navController.navigate(
+                        Screen.FixtureDetails.withArgs(fixtureId.toString())
+                    )
+                }
+            )
         }
         // Navigation to LiveMatches Screen
         composable(Screen.LiveMatches.route) {
