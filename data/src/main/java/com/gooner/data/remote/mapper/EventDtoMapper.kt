@@ -2,6 +2,7 @@ package com.gooner.data.remote.mapper
 
 import com.gooner.data.remote.dto.EventDto
 import com.gooner.data.util.EntityMapper
+import com.gooner.domain.model.Assist
 import com.gooner.domain.model.Event
 import com.gooner.domain.model.EventTime
 
@@ -18,6 +19,10 @@ class EventDtoMapper(
                 extra = entity.time.extra
             ),
             player = playerDtoMapper.mapFromEntity(entity.player),
+            assist = Assist(
+                id = entity.assist.id,
+                name = entity.assist.name
+            ),
             team = teamDtoMapper.mapFromEntity(entity.team)
         )
 
