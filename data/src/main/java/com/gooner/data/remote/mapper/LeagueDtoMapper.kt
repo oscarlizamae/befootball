@@ -14,7 +14,7 @@ class LeagueDtoMapper : EntityMapper<LeagueInfo, League> {
             logoUrl = entity.league.logoUrl
         )
 
-    override fun mapToEntity(model: League): LeagueInfo =
+    /* override fun mapToEntity(model: League): LeagueInfo =
         LeagueInfo(
             league = LeagueDto(
                 id = model.id,
@@ -22,7 +22,7 @@ class LeagueDtoMapper : EntityMapper<LeagueInfo, League> {
                 type = model.type ?: "",
                 logoUrl = model.logoUrl ?: ""
             )
-        )
+        ) */
 
     override fun mapFromEntityList(entities: List<LeagueInfo>): List<League> =
         entities.map { mapFromEntity(it) }

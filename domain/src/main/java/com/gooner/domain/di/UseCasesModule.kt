@@ -6,4 +6,5 @@ import org.koin.dsl.module
 val useCasesModule = module {
     factory<GetCurrentLeagues> { GetCurrentLeaguesImpl(get()) }
     factory<GetLiveMatches> { GetLiveMatchesImpl(get()) }
+    factory<GetFixtureDetails> { GetFixtureDetailsImpl(get()) }
 }

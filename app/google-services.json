@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "717121333535",
+    "project_id": "befootball-2b972",
+    "storage_bucket": "befootball-2b972.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717121333535:android:08fc144aef1ac81dafe82a",
+        "android_client_info": {
+          "package_name": "com.gooner.befootball"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "717121333535-c2fqfgl55j74cosmktf2gk9ke8m2qaov.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtRIwz83ZxDgwJtsEW-xhIW7HcNNYx1G0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "717121333535-c2fqfgl55j74cosmktf2gk9ke8m2qaov.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

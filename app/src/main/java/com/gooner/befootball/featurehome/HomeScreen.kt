@@ -21,7 +21,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,15 +31,18 @@ import com.gooner.befootball.R
 import com.gooner.befootball.ui.theme.*
 import com.gooner.befootball.util.BarsColors
 import com.gooner.befootball.util.CircleShimmer
+import com.gooner.befootball.util.CustomSubcomposeAsyncImage
+import com.gooner.befootball.util.helpers.HomeViewModelPreview
 import com.gooner.domain.model.*
-import com.gooner.domain.usecases.GetLiveMatches
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onAllLiveMatchesClicked: () -> Unit,
+    onFixtureCardClicked: (Int) -> Unit,
+    homeScreenViewModel: IHomeScreenViewModel = getViewModel<HomeScreenViewModel>()
+) {
 
-    val context = LocalContext.current
-    val homeScreenViewModel = getViewModel<HomeScreenViewModel>()
     val leagues by remember { homeScreenViewModel.leagues }
     val liveMatches by remember { homeScreenViewModel.liveMatches }
 
@@ -61,7 +63,12 @@ fun HomeScreen() {
     ) {
         AppLogoContainer()
         LiveMatchesLeagues(leagues = leagues)
-        LiveMatches(liveMatches = liveMatches)
+        LiveMatches(
+            liveMatches = liveMatches,
+            onAllLiveMatchesClicked = { onAllLiveMatchesClicked() }
+        ) {
+            onFixtureCardClicked(it)
+        }
     }
 
 }
@@ -108,8 +115,8 @@ fun LiveMatchesLeagues(
                     top = 24.dp,
                     bottom = 8.dp
                 ),
-            text = stringResource(id = R.string.live_matches),
-            color = Color.White,
+            text = stringResource(id = R.string.live_matches_from_leagues),
+            color = MaterialTheme.colors.onPrimary,
             style = typography.h6
         )
         LiveMatchesLeaguesContent(leagues = leagues)
@@ -138,7 +145,7 @@ fun LiveMatchesLeaguesContent(
             leagues.forEachIndexed { index, league ->
                 if (index < 10) {
                     LeagueIcon(
-                        leagueName = league.name,
+                        leagueName = league.name ?: "",
                         logoUrl = league.logoUrl ?: "https://images.matematego.com/assets/noimage-cf86abd9b579765c1131ec86cb1e70052199ddadfecf252e5cb98e50535d11f3.png"
                     )
                 }
@@ -156,18 +163,16 @@ fun LeagueIcon(
         modifier = Modifier
             .padding(top = 8.dp, start = 12.dp, bottom = 24.dp, end = 4.dp)
             .clip(CircleShape)
-            .background(Color(0xFFcfd8dc))
+            .clickable { }
+            //.background(Color(0xFFcfd8dc))
     ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(logoUrl)
-                .build(),
+        CustomSubcomposeAsyncImage(
+            context = LocalContext.current,
+            url = logoUrl,
             contentDescription = leagueName,
-            placeholder = painterResource(id = R.drawable.ic_uefa_europa_league),
             modifier = Modifier
                 .padding(8.dp)
                 .size(72.dp)
-                .clickable { }
                 .background(Color.Transparent),
             contentScale = ContentScale.Inside,
         )
@@ -176,7 +181,9 @@ fun LeagueIcon(
 
 @Composable
 fun LiveMatches(
-    liveMatches: List<Fixture>
+    liveMatches: List<Fixture>,
+    onAllLiveMatchesClicked: () -> Unit,
+    onFixtureCardClicked: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -193,39 +200,45 @@ fun LiveMatches(
                 style = typography.h6,
                 color = MaterialTheme.colors.onPrimary
             )
-            Text(
-                modifier = Modifier.padding(end = 16.dp),
-                text = stringResource(id = R.string.all_matches),
-                style = typography.body2,
-                color = MaterialTheme.colors.onPrimary
-            )
+            if (liveMatches.size > 9) {
+                Text(
+                    modifier = Modifier
+                        .padding(end = 16.dp)
+                        .clickable { onAllLiveMatchesClicked() },
+                    text = stringResource(id = R.string.all_matches),
+                    style = typography.body2,
+                    color = MaterialTheme.colors.onPrimary
+                )
+            }
         }
         LiveMatchesContainer(
             liveMatches = liveMatches,
             color = LiveMatchCardColor
-        )
+        ) {
+            onFixtureCardClicked(it)
+        }
     }
 }
 
 @Composable
 fun LiveMatchesContainer(
     liveMatches: List<Fixture>,
-    color: Color
+    color: Color,
+    onFixtureCardClicked: (Int) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState())
     ) {
-        /* for (i in 1..5) {
-            LiveMatchCard(color = color)
-        } */
         liveMatches.forEachIndexed { index, fixture ->
             if (index < 10) {
                 LiveMatchCard(
                     fixture = fixture,
                     color = color
-                )
+                ) {
+                    onFixtureCardClicked(it)
+                }
             }
         }
     }
@@ -234,7 +247,8 @@ fun LiveMatchesContainer(
 @Composable
 fun LiveMatchCard(
     fixture: Fixture,
-    color: Color
+    color: Color,
+    onFixtureCardClicked: (Int) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth()
@@ -243,7 +257,7 @@ fun LiveMatchCard(
             modifier = Modifier
                 .padding(end = 16.dp, top = 8.dp)
                 .fillMaxWidth()
-                .clickable { }
+                .clickable { onFixtureCardClicked(fixture.id) }
                 .widthIn(0.dp, 130.dp),
             shape = RoundedCornerShape(8.dp),
             backgroundColor = color
@@ -383,8 +397,17 @@ fun TeamScore(
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(
+    showSystemUi = true,
+
+)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    BeFootballTheme {
+        HomeScreen(
+            onAllLiveMatchesClicked = { },
+            onFixtureCardClicked = { },
+            homeScreenViewModel = HomeViewModelPreview()
+        )
+    }
 }
