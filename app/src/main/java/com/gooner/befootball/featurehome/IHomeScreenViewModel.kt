@@ -2,11 +2,10 @@ package com.gooner.befootball.featurehome
 
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
-import com.gooner.domain.model.Fixture
-import com.gooner.domain.model.League
+import com.gooner.befootball.featurehome.HomeScreenViewModel.UIState
+import com.gooner.befootball.featurehome.HomeScreenViewModel.UIEvent
 
 abstract class IHomeScreenViewModel: ViewModel() {
-    abstract val leagues: MutableState<List<League>>
-    abstract val liveMatches: MutableState<List<Fixture>>
-    abstract fun fetchLivesMatches()
+    abstract val uiState: UIState
+    abstract fun onUiEvent(uiEvent: UIEvent)
 }

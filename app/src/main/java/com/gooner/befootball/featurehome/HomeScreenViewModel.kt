@@ -1,12 +1,10 @@
 package com.gooner.befootball.featurehome
 
-import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.gooner.domain.model.Fixture
 import com.gooner.domain.model.League
 import com.gooner.domain.usecases.GetLiveMatches
@@ -14,19 +12,24 @@ import com.gooner.domain.util.ResponseResult
 import kotlinx.coroutines.launch
 
 class HomeScreenViewModel(
-    private val getLiveMatches: GetLiveMatches
+    private val getLiveMatches: GetLiveMatches,
 ) : IHomeScreenViewModel() {
 
-    @SuppressLint("MutableCollectionMutableState")
-    override val leagues = mutableStateOf<List<League>>(mutableListOf())
-    override val liveMatches = mutableStateOf<List<Fixture>>(emptyList())
+    override var uiState by mutableStateOf(UIState())
+        private set
 
-    override fun fetchLivesMatches() {
+    private fun onStart() {
+        onCallGetLivesMatches()
+    }
+
+    private fun onCallGetLivesMatches() {
         viewModelScope.launch {
             when (val result = getLiveMatches()) {
                 is ResponseResult.Success -> {
-                    liveMatches.value = result.data
-                    filterLeagues(liveMatches.value)
+                    uiState = uiState.copy(
+                        liveMatches = result.data
+                    )
+                    filterLeagues(uiState.liveMatches)
                 }
                 else -> {
                     Log.e("HomeScreen", result.toString())
@@ -41,8 +44,27 @@ class HomeScreenViewModel(
             uniqueLeagues.add(fixture.league)
         }
         uniqueLeagues.let {
-            leagues.value = it.distinct().toList()
+            uiState = uiState.copy(
+                leagues = it.distinct().toList()
+            )
         }
+    }
+
+    override fun onUiEvent(uiEvent: UIEvent) {
+        when (uiEvent) {
+            UIEvent.OnStart -> onStart()
+            UIEvent.OnCallGetLiveMatches -> onCallGetLivesMatches()
+        }
+    }
+
+    data class UIState(
+        val leagues: List<League> = emptyList(),
+        val liveMatches: List<Fixture> = emptyList()
+    )
+
+    sealed class UIEvent {
+        object OnStart: UIEvent()
+        object OnCallGetLiveMatches: UIEvent()
     }
 
 }
